@@ -1,10 +1,13 @@
+import Button from "@/components/ui/Button";
 import { FC } from "react";
 
 interface pageProps {}
 
 const page: FC<pageProps> = ({}) => {
   return(
-    <h1>hello</h1>
+    <>
+    <Button>ClickMe</Button>
+    </>
   )
 
 }
