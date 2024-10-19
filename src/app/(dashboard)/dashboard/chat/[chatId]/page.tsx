@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth"
 import { notFound } from "next/navigation"
 import { FC } from "react"
 import Messages from "@/components/Mesages";
+import ChatInput from "@/components/ChatInput";
 
 interface pageProps {
   params: {
@@ -80,7 +81,9 @@ const page = async ({params}: pageProps) => {
         </div>
       </div>
 
-      <Messages initialMessages={initialMessages} sessionId={session.user.id} />
+      <Messages chatPartner={chatPartner} sessionImg={session.user.image} initialMessages={initialMessages} sessionId={session.user.id} />
+
+      <ChatInput  chatPartner={chatPartner} chatId={chatId}/>
     </div>
 }
 

@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 
       await db.sadd(`user:${session.user.id}:friends`, idToAdd)
 
-      await db.sadd(`user:${idToAdd}:friend` , session.user.id)
+      await db.sadd(`user:${idToAdd}:friends` , session.user.id)
 
       // await db.srem(`user:${idToAdd}:friend_requests`, session.user.id)
 
