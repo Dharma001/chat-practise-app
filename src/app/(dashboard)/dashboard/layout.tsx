@@ -1,6 +1,8 @@
 import FirendRequestsSidebarOptions from "@/components/FriendRequestsSidebarOptions";
 import { Icon, Icons } from "@/components/Icons"
+import SidebarChatList from "@/components/SidebarChatList";
 import SignOutButton from "@/components/SignOutButton";
+import { getFriendsByUserId } from "@/helpers/get-friends-by-user-id";
 import { fetchRedis } from "@/helpers/redis";
 import { authOptions } from "@/lib/auth"
 import { getServerSession } from "next-auth"
@@ -34,19 +36,25 @@ const Layout = async ({ children }: LayoutProps) => {
   const session = await getServerSession(authOptions)
   if(!session) notFound()
 
+  const friends = await getFriendsByUserId(session.user.id)
+  
   const unseenRequestcount = (await fetchRedis('smembers', `user:${session.user.id}:incoming_friend_requests`) as User[]).length
 
   return <div className="w-full flex h-screen">
     <div className="flex h-full w-full max-w-xs grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white p-6">
     <Link href="/dashboard" className="flex h-16 shrink-0 items-center">
-    <Icons.Logo className="h-8 w-18 text-indigo-600"/></Link>
-    <div className="text-xs font-semibold leading-6 text-gray-400">
-      your chats
-    </div>
+      <Icons.Logo className="h-8 w-18 text-indigo-600"/>
+    </Link>
+
+    {friends.length > 0 ? (
+      <div className="text-xs font-semibold leading-6 text-gray-400">
+        your chats
+      </div>
+    ) : ''}
     <nav className="flex flex-1 flex-col">
       <ul role="list" className="flex flex-1 flex-col gap-y-7">
         <li>
-          //adsajkdhsk
+          <SidebarChatList friends={friends} sessionId={session.user.id} />
         </li>
         <li>
           <div className="text-xs font-semibold leading-6 text-gray-400">
@@ -69,13 +77,13 @@ const Layout = async ({ children }: LayoutProps) => {
               </li>
             )
           })}
-        </ul>
-        </li>
 
-          <li>
+            <li>
             <FirendRequestsSidebarOptions sessionId={session.user.id} initialUnseenRequestCount={unseenRequestcount} />
           </li>
 
+        </ul>
+        </li>
         <li className="-mx-6 mt-auto flex items-center">
           <div className="flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-600">
             <div className="relative h-8 w-8 bg-gray-50">
@@ -103,6 +111,7 @@ const Layout = async ({ children }: LayoutProps) => {
     </div>
     {children}
     </div>
+    
 }
 
 export default Layout;

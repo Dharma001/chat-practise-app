@@ -29,14 +29,14 @@ export async function POST(req: Request){
       })
     }
 
-    const isAlreadyAdded = (await fetchRedis('smembers', `user:${idToAdd}:incoming_friend_requests`, session.user.id) as 0 | 1)
+    const isAlreadyAdded = (await fetchRedis('sismember', `user:${idToAdd}:incoming_friend_requests`, session.user.id) as 0 | 1)
 
     if(isAlreadyAdded) {
       return new Response('Already added this user', {status: 400})
     } 
 
 
-    const isAlreadyFriends = (await fetchRedis('smembers', `user:${session.user.id}:friends`, idToAdd) as 0 | 1)
+    const isAlreadyFriends = (await fetchRedis('sismember', `user:${session.user.id}:friends`, idToAdd) as 0 | 1)
 
     if(isAlreadyFriends) {
       return new Response('Already friend with this user.', {status: 400})
