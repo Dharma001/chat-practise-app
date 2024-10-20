@@ -5,7 +5,6 @@ import { messageArrayValidator } from "@/lib/validations/message"
 import Image from "next/image";
 import { getServerSession } from "next-auth"
 import { notFound } from "next/navigation"
-import { FC } from "react"
 import Messages from "@/components/Mesages";
 import ChatInput from "@/components/ChatInput";
 
@@ -31,7 +30,7 @@ async function getChatMessages(chatId: string) {
       const messages = messageArrayValidator.parse(reversedDbMessages)
 
       return messages
-  } catch (error) {
+  } catch {
     notFound()
   }
 }

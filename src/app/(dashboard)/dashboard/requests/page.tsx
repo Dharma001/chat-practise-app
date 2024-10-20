@@ -2,10 +2,8 @@
 import FriendRequests from "@/components/FriendRequests";
 import { fetchRedis } from "@/helpers/redis";
 import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
+import { getServerSession } from 'next-auth'
 import { notFound } from "next/navigation";
-import { FC } from "react";
-
 
 const page = async () => {
   const session = await getServerSession(authOptions)
