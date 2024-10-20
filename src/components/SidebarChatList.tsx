@@ -31,6 +31,7 @@ useEffect(() => {
     router.refresh()
   }
 
+
   const chatHandler = (message: ExtendedMessage ) => {
     const shouldNotify = pathname !== `/dashboard/chat/${chatHrefConstructor(sessionId , message.senderId)}`
 
@@ -56,6 +57,8 @@ useEffect(() => {
     pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:chats`))
     pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:friends`))
   
+    pusherClient.unbind('new_message', chatHandler)
+    pusherClient.unbind('new_friend', newFriendhandler)
   }
 }, [pathname, sessionId, router])
 
